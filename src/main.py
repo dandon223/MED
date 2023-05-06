@@ -1,5 +1,5 @@
 import argparse
-from tests import dev_test
+from tests import dev_test, test
 
 def main():
     parser = argparse.ArgumentParser(description='MED: Automatic testing suit')
@@ -19,6 +19,8 @@ def main():
             dev_test(args.dataset)
         else:
             dev_test()
+    if args.test is not None:
+        test()
 
 
 if __name__ == "__main__":
