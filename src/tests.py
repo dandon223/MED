@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 from sklearn.cluster import AgglomerativeClustering
+from nn_chain_linkage import NNChainLinkage, get_clusters
 from pyclustering.cluster.cure import cure
 from sklearn import metrics
 
@@ -86,8 +87,7 @@ def test_cure_clustering(datasets: Dict[str, pd.DataFrame], number_of_clusters: 
 def test_agglomerative_clustering(datasets: Dict[str, pd.DataFrame], number_of_clusters: Dict[str, int]) -> pd.DataFrame:
     results = []
     for dataset in datasets:
-        print(dataset)
-        hierarchical_cluster = AgglomerativeClustering(n_clusters=number_of_clusters[dataset], affinity='euclidean', linkage='ward')
+        hierarchical_cluster = AgglomerativeClustering(n_clusters=number_of_clusters[dataset], affinity='euclidean', linkage='single')
         result = {}
         data = datasets[dataset]
         Y_data = data["ground_truth"]
@@ -123,6 +123,17 @@ def dev_test(dataset: str = "../datasets/artificial/target.arff") -> None:
 
     data["AgglomerativeClustering"] = labels
 
+
+    nn_chain_linkage_alg = NNChainLinkage()
+    linkage = nn_chain_linkage_alg.fit_predict(X_data.to_numpy())
+    clusters = get_clusters(linkage, len(X_data), number_of_clusters)
+    for index, cluster in enumerate(clusters):
+        for point in cluster:
+            data.at[point, "CUREClustering"] = index
+
+    rand_score = metrics.rand_score( labels_true=Y_data, labels_pred=data["CUREClustering"])
+    print('rand_score', rand_score)
+    print("px.scatter")
     fig = px.scatter(data,
                          x='x',
                          y='y',
@@ -141,5 +152,5 @@ def dev_test(dataset: str = "../datasets/artificial/target.arff") -> None:
                          x='x',
                          y='y',
                          color='CUREClustering',
-                         title=f"CUREClustering {dataset}")
+                         title=f"my {dataset}")
     fig.show()
