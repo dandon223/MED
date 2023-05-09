@@ -5,9 +5,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import time
 from sklearn.cluster import AgglomerativeClustering
 from nn_chain_linkage import NNChainLinkage, get_clusters
-from pyclustering.cluster.cure import cure
 from sklearn import metrics
 
 def get_dataset(dataset: str) -> Tuple[pd.DataFrame, int]:
@@ -23,6 +23,10 @@ def get_dataset(dataset: str) -> Tuple[pd.DataFrame, int]:
             df[column] = df[column].cat.codes
 
     df.fillna(df.mean(), inplace=True)
+    df.drop_duplicates(inplace=True, ignore_index=True)
+    d = df.duplicated(subset=['left-weight','left-distance', 'right-weight', 'right-distance'])
+    #df["yes"] = d
+    #df.to_csv("t.csv")
     return df, number_of_clusters
 
 def get_datasets(files: List[Path]) -> Tuple[Dict, Dict]:
@@ -44,94 +48,118 @@ def get_datasets(files: List[Path]) -> Tuple[Dict, Dict]:
 
 def test() -> None:
 
-    print("test_rand_score_artificial")
-    test_rand_score("../datasets/artificial", "../results/rand_score_artificial.csv")
+    #print("test_rand_score_artificial")
+    #test_rand_score_time("../datasets/artificial-subset", "../results/rand_score_artificial-subset.csv", 1)
     print("test_rand_score_real-world")
-    test_rand_score("../datasets/real-world", "../results/real_world.csv")
+    test_rand_score_time("../datasets/real-world-subset", "../results/rand_score_real_world.csv", 1)
 
     return 0
 
-def test_rand_score(folder: str, csv_name: str):
+def test_rand_score_time(folder: str, csv_name: str, number_of_times: int) -> None:
     datasets, number_of_clusters = get_datasets(Path(folder).glob("*"))
 
     print("test_agglomerative_clustering")
-    df = test_agglomerative_clustering(datasets, number_of_clusters)
-    print("test_cure_clustering")
-    df_cure = test_cure_clustering(datasets, number_of_clusters)
-    df["dataset_name2"] = df_cure["dataset_name"]
-    df["cure_clustering_rand_score"] = df_cure["cure_clustering_rand_score"]
+    df = test_agglomerative_clustering(datasets, number_of_clusters, "agglomerative_clustering", number_of_times)
+    print("test_nn_linkage_clustering")
+    df_nn_linkage = test_nn_linkage_clustering(datasets, number_of_clusters, "nn_linkage_clustering", number_of_times)
+    df["dataset_name2"] = df_nn_linkage["dataset_name"]
+    df["nn_linkage_clustering_rand_score"] = df_nn_linkage["nn_linkage_clustering_rand_score"]
+    df["nn_linkage_clustering_time"] = df_nn_linkage["nn_linkage_clustering_time"]
 
     df.to_csv(csv_name, index=False)
 
-def test_cure_clustering(datasets: Dict[str, pd.DataFrame], number_of_clusters: Dict[str, int]) -> pd.DataFrame:
+def test_nn_linkage_clustering(datasets: Dict[str, pd.DataFrame], number_of_clusters: Dict[str, int], column_name: str, number_of_times: int) -> pd.DataFrame:
     results = []
-    for dataset in datasets:
+    dataset_size = len(datasets)
+    for index, dataset in enumerate(datasets):
+        print(dataset)
+        if index%5 == 0:
+            print(f"Dataset: {index+1}/{dataset_size}.")
+        time_run = 0.0
+        score = 0.0
+        for _ in range(number_of_times):
+            data = datasets[dataset]
+            Y_data = data["ground_truth"]
+            X_data = data.drop(['ground_truth'], axis=1)
+            nn_chain_linkage_alg = NNChainLinkage()
+            start = time.time()
+            linkage = nn_chain_linkage_alg.fit_predict(X_data.to_numpy())
+            clusters = get_clusters(linkage, len(X_data), number_of_clusters[dataset])
+            data[column_name] = np.nan
+            for index, cluster in enumerate(clusters):
+                for point in cluster:
+                    data.at[point, column_name] = index
+            end = time.time()
+            score += metrics.rand_score( labels_true=Y_data, labels_pred=data[column_name])
+            time_run += end - start
+
+        score /= number_of_times
+        time_run /= number_of_times
         result = {}
-        data = datasets[dataset]
-        Y_data = data["ground_truth"]
-        X_data = data.drop(['ground_truth'], axis=1)
-        cure_instance = cure(X_data.to_numpy() , number_of_clusters[dataset])
-        cure_instance.process()
-        clusters = cure_instance.get_clusters()
-        data["cure_clustering"] = np.nan
-        for index, cluster in enumerate(clusters):
-            for point in cluster:
-                data.at[point, "cure_clustering"] = index
-        rand_score = metrics.rand_score( labels_true=Y_data, labels_pred=data["cure_clustering"])
         result["dataset_name"] = dataset
-        result["cure_clustering_rand_score"] = rand_score
+        result[column_name+"_rand_score"] = score
+        result[column_name+"_time"] = time_run
+
         results.append(result)
     df = pd.DataFrame(results)
     return df
 
-def test_agglomerative_clustering(datasets: Dict[str, pd.DataFrame], number_of_clusters: Dict[str, int]) -> pd.DataFrame:
+def test_agglomerative_clustering(datasets: Dict[str, pd.DataFrame], number_of_clusters: Dict[str, int], column_name: str, number_of_times: int) -> pd.DataFrame:
     results = []
-    for dataset in datasets:
-        hierarchical_cluster = AgglomerativeClustering(n_clusters=number_of_clusters[dataset], affinity='euclidean', linkage='single')
+    dataset_size = len(datasets)
+    for index, dataset in enumerate(datasets):
+        print(dataset)
+        if index%5 == 0:
+            print(f"Dataset: {index+1}/{dataset_size}.")
+        time_run = 0.0
+        score = 0.0
+        for _ in range(number_of_times):
+            hierarchical_cluster = AgglomerativeClustering(n_clusters=number_of_clusters[dataset], affinity='euclidean', linkage='ward')
+            data = datasets[dataset]
+            Y_data = data["ground_truth"]
+            X_data = data.drop(['ground_truth'], axis=1)
+            start = time.time()
+            labels = hierarchical_cluster.fit_predict(X_data)
+            end = time.time()
+            score += metrics.rand_score( labels_true=Y_data, labels_pred=labels)
+            time_run += end - start
+        
+        score /= number_of_times
+        time_run /= number_of_times
         result = {}
-        data = datasets[dataset]
-        Y_data = data["ground_truth"]
-        X_data = data.drop(['ground_truth'], axis=1)
-        labels = hierarchical_cluster.fit_predict(X_data)
-        rand_score = metrics.rand_score( labels_true=Y_data, labels_pred=labels)
         result["dataset_name"] = dataset
-        result["agglomerative_clustering_rand_score"] = rand_score
+        result[column_name+"_rand_score"] = score
+        result[column_name+"_time"] = time_run
+        
         results.append(result)
     df = pd.DataFrame(results)
     return df
 
-def dev_test(dataset: str = "../datasets/artificial/target.arff") -> None:
+def dev_test(dataset: str = "../datasets/real-world/balance-scale.arff") -> None: #ds3c3sc6 # artificial/target # real-world/balance-scale.arff
     data, number_of_clusters = get_dataset(dataset)
     Y_data = data["ground_truth"]
     X_data = data.drop(['ground_truth'], axis=1)
 
-    hierarchical_cluster = AgglomerativeClustering(n_clusters=number_of_clusters, affinity='euclidean', linkage='ward')
+    hierarchical_cluster = AgglomerativeClustering(n_clusters=number_of_clusters, affinity='euclidean', linkage='single')
     labels = hierarchical_cluster.fit_predict(X_data)
+    data["AgglomerativeClustering"] = labels
     rand_score = metrics.rand_score( labels_true=Y_data, labels_pred=labels)
     print('rand_score', rand_score)
-
-    cure_instance = cure(X_data.to_numpy() , number_of_clusters)
-    cure_instance.process()
-    clusters = cure_instance.get_clusters()
-
-    data["CUREClustering"] = Y_data
-    for index, cluster in enumerate(clusters):
-        for point in cluster:
-            data.at[point, "CUREClustering"] = index
-    rand_score = metrics.rand_score( labels_true=Y_data, labels_pred=data["CUREClustering"])
-    print('rand_score', rand_score)
-
-    data["AgglomerativeClustering"] = labels
-
-
+    start = time.time()
     nn_chain_linkage_alg = NNChainLinkage()
     linkage = nn_chain_linkage_alg.fit_predict(X_data.to_numpy())
     clusters = get_clusters(linkage, len(X_data), number_of_clusters)
+    end = time.time()
+    print("time", end-start)
+    data["NNChainLinkageClustering"] = np.nan
+    start = time.time()
     for index, cluster in enumerate(clusters):
         for point in cluster:
-            data.at[point, "CUREClustering"] = index
-
-    rand_score = metrics.rand_score( labels_true=Y_data, labels_pred=data["CUREClustering"])
+            data.at[point, "NNChainLinkageClustering"] = index
+    end = time.time()
+    print("time", end-start)
+    data.to_csv("test.csv", index=False)
+    rand_score = metrics.rand_score( labels_true=Y_data, labels_pred=data["NNChainLinkageClustering"])
     print('rand_score', rand_score)
     print("px.scatter")
     fig = px.scatter(data,
@@ -151,6 +179,6 @@ def dev_test(dataset: str = "../datasets/artificial/target.arff") -> None:
     fig = px.scatter(data,
                          x='x',
                          y='y',
-                         color='CUREClustering',
+                         color='NNChainLinkageClustering',
                          title=f"my {dataset}")
     fig.show()

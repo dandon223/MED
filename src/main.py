@@ -1,6 +1,5 @@
 import argparse
 from tests import dev_test, test
-
 def main():
     parser = argparse.ArgumentParser(description='MED: Automatic testing suit')
 
@@ -8,9 +7,6 @@ def main():
     parser.add_argument('--dev_test', help='run test suit for development', type=str)
     parser.add_argument('--dataset', help='one dataset for testing', type=str)
     parser.add_argument('--test', help='run test suit', type=str)
-    parser.add_argument('--plot',
-                       help='plot sample clustering results',
-                       type=str)
     
     args = parser.parse_args()
 
