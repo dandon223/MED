@@ -48,32 +48,32 @@ def get_datasets(files: List[Path]) -> Tuple[Dict, Dict]:
 
 def test() -> None:
 
-    #print("single_test_rand_score_artificial")
-    #test_rand_score_time("../datasets/artificial-subset", "../results/single_rand_score_artificial-subset.csv", "euclidean", "single", 5)
-    #print("single_test_rand_score_real_world_subset")
-    #test_rand_score_time("../datasets/real-world-subset", "../results/single_rand_score_real_world_subset.csv", "euclidean", "single", 5)
+    print("single_test_rand_score_artificial")
+    test_rand_score_time("../datasets/artificial-subset", "../results/single_rand_score_artificial-subset.csv", "euclidean", "single", 5)
+    print("single_test_rand_score_real_world_subset")
+    test_rand_score_time("../datasets/real-world-subset", "../results/single_rand_score_real_world_subset.csv", "euclidean", "single", 5)
 
-    #print("complete_test_rand_score_artificial")
-    #test_rand_score_time("../datasets/artificial-subset", "../results/complete_rand_score_artificial-subset.csv", "euclidean", "complete", 5)
-    #print("complete_test_rand_score_real_world_subset")
-    #test_rand_score_time("../datasets/real-world-subset", "../results/complete_rand_score_real_world_subset.csv", "euclidean", "complete", 5)
+    print("complete_test_rand_score_artificial")
+    test_rand_score_time("../datasets/artificial-subset", "../results/complete_rand_score_artificial-subset.csv", "euclidean", "complete", 5)
+    print("complete_test_rand_score_real_world_subset")
+    test_rand_score_time("../datasets/real-world-subset", "../results/complete_rand_score_real_world_subset.csv", "euclidean", "complete", 5)
 
-    #print("average_test_rand_score_artificial")
-    #test_rand_score_time("../datasets/artificial-subset", "../results/average_score_artificial-subset.csv", "euclidean", "average", 5)
-    #print("average_test_rand_score_real_world_subset")
-    #test_rand_score_time("../datasets/real-world-subset", "../results/average_score_real_world_subset.csv", "euclidean", "average", 5)
+    print("average_test_rand_score_artificial")
+    test_rand_score_time("../datasets/artificial-subset", "../results/average_score_artificial-subset.csv", "euclidean", "average", 5)
+    print("average_test_rand_score_real_world_subset")
+    test_rand_score_time("../datasets/real-world-subset", "../results/average_score_real_world_subset.csv", "euclidean", "average", 5)
 
-    #print("single_manhattan_test_rand_score_artificial")
-    #test_rand_score_time("../datasets/artificial-subset", "../results/single_manhattan_rand_score_artificial-subset.csv", "manhattan", "single", 5)
-    #print("single_manhattan_test_rand_score_real_world_subset")
-    #test_rand_score_time("../datasets/real-world-subset", "../results/single_manhattan_rand_score_real_world_subset.csv", "manhattan", "single", 5)
+    print("single_manhattan_test_rand_score_artificial")
+    test_rand_score_time("../datasets/artificial-subset", "../results/single_manhattan_rand_score_artificial-subset.csv", "manhattan", "single", 5)
+    print("single_manhattan_test_rand_score_real_world_subset")
+    test_rand_score_time("../datasets/real-world-subset", "../results/single_manhattan_rand_score_real_world_subset.csv", "manhattan", "single", 5)
 
-    #print("number_of_features_test")
-    #columns_number = [2, 4, 8, 16, 32, 64, 128, 256]
-    #test_number_of_features(columns_number, number_of_times=5, column_name="nn_linkage_clustering", csv_name="../results/arrhythmia_features_time.csv")
+    print("number_of_features_test")
+    columns_number = [2, 4, 8, 16, 32, 64, 128, 256]
+    test_number_of_features(columns_number, number_of_times=5, column_name="nn_linkage_clustering", csv_name="../results/arrhythmia_features_time.csv")
     
     print("number_of_rows_test")
-    rows_number = [1000, 2000, 4000, 8000, 10000, 12000, 14000, 16000, 18000, 20000]
+    rows_number = [100, 200, 500, 1000, 2000, 4000, 6000, 8000, 10000]
     test_number_of_rows(rows_number, number_of_times=5, column_name="nn_linkage_clustering", csv_name="../results/letter_rows_time.csv")
     return 0
 
@@ -97,6 +97,7 @@ def test_number_of_rows(rows_number, dataset_name: str = "../datasets/real-world
                 for point in cluster:
                     data.at[point, column_name] = index
             end = time.time()
+            print("time:", end - start)
             time_run += end - start
 
         time_run /= number_of_times
@@ -229,6 +230,7 @@ def dev_test(dataset: str = "../datasets/artificial/target.arff") -> None: #ds3c
     data["AgglomerativeClustering"] = labels
     rand_score = metrics.rand_score( labels_true=Y_data, labels_pred=labels)
     print('rand_score', rand_score)
+    
     start = time.time()
     nn_chain_linkage_alg = NNChainLinkage()
     linkage = nn_chain_linkage_alg.fit_predict(X_data.to_numpy())
@@ -242,9 +244,9 @@ def dev_test(dataset: str = "../datasets/artificial/target.arff") -> None: #ds3c
             data.at[point, "NNChainLinkageClustering"] = index
     end = time.time()
     print("time", end-start)
-    data.to_csv("test.csv", index=False)
     rand_score = metrics.rand_score( labels_true=Y_data, labels_pred=data["NNChainLinkageClustering"])
     print('rand_score', rand_score)
+    
     print("px.scatter")
     fig = px.scatter(data,
                          x='x',

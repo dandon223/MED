@@ -57,7 +57,7 @@ class NNChainLinkage():
         return labels
 
     def _nn_chain_core(self, data_size: int, pairwise_diss: np.ndarray):
-        L = np.empty((1, 3))
+        L = np.empty((data_size-1, 3))
         i=0
         S = np.arange(data_size, dtype=np.int_)
         chain = []
@@ -71,9 +71,9 @@ class NNChainLinkage():
                 b = S[1]
                 chain = [a]
                 #print("a, b", a, b)
-                if size[b] == 0:
-                    print("1 size[b] == 0", b)
-                    exit(-1)
+                #if size[b] == 0:
+                #    print("1 size[b] == 0", b)
+                #    exit(-1)
             else:
                 #print("else")
                 #print("chain", chain)
@@ -81,15 +81,12 @@ class NNChainLinkage():
                 b = chain[-3]
                 chain = chain[:len(chain) - 3]
                 #print("chain2", chain)
-                if size[b] == 0:
-                    print("2 size[b] == 0", b)
-                    exit(-1)
+                #if size[b] == 0:
+                #    print("2 size[b] == 0", b)
+                #    exit(-1)
             
             while True:
                 #print("while True:")
-                if chain == [624, 374]:
-                    print(pairwise_diss[624, 374])
-                    print(pairwise_diss[374, 624])
                 #print(a, b)
                 c = b
                 b_a_value = pairwise_diss[b, a]
@@ -109,33 +106,28 @@ class NNChainLinkage():
                     #print("vs", x_a_value, b_a_value)
                     c = x_a_index
 
-                if c not in S:
-                    print("c not in S")
-                    exit(-1)
+                #if c not in S:
+                #    print("c not in S")
+                #    exit(-1)
 
                 a, b = c, a
                 #print("a, b", a, b)
-                if size[b] == 0:
-                    print("3 size[b] == 0", b)
-                    exit(-1)
+                #if size[b] == 0:
+                #    print("3 size[b] == 0", b)
+                #    exit(-1)
                 chain.append(a)
                 #print("chain", chain)
                 if len(chain) >=3 and a == chain[-3]:
                     break
 
             #print("L: a, b", a, b)
-            if chain == [624, 374, 324, 624, 324]:
-                print(pairwise_diss[624, 374])
-                print(pairwise_diss[374, 624])
-                print(pairwise_diss[324, 624])
-                print(pairwise_diss[624, 324])
-            if size[b] == 0:
-                print("size[b] == 0", b)
-                exit(-1)
+            #if size[b] == 0:
+            #    print("size[b] == 0", b)
+            #    exit(-1)
             L[i, 0] = a
             L[i, 1] = b
             L[i, 2] = pairwise_diss[a, b]
-            L = np.append(L, [[-1,-1,-1]], axis=0)
+            
             i = i + 1
             S = np.delete(S, np.where(S == a))
             S = np.delete(S, np.where(S == b))
@@ -149,11 +141,10 @@ class NNChainLinkage():
                 pairwise_diss[x, n] = diss
             S = np.append(S, n)
 
-        L = L[:-1, :]
         #print(size)
         return L
 
-    # single # ward
+    # single
     def _single(self, diss_a_x, diss_b_x, diss_a_b, size_a, size_b, size_x):
         #ward = (size_a+size_x) * diss_a_x + (size_b + size_x) * diss_b_x - size_x * diss_a_b
         #if ward > 1000:
@@ -221,10 +212,10 @@ class UnionFind:
         return n
     
 def get_clusters(linkage, n_data, n_clusters):
-    #print(linkage)
     for link in linkage:
         if link[0] == link[1]:
             print(link)
+    #print(linkage)
     clusters = {}
     curr_label = n_data
     for i in range(n_data):
@@ -255,8 +246,7 @@ def get_clusters(linkage, n_data, n_clusters):
             continue
 
         clusters[curr_label] = []
-        clusters[curr_label] = [] + clusters[ready[i][0]] + clusters[ready[i]
-                                                                     [1]]
+        clusters[curr_label] = [] + clusters[ready[i][0]] + clusters[ready[i][1]]
         #print(ready[i][0])
         clusters.pop(ready[i][0])
         clusters.pop(ready[i][1])
