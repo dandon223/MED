@@ -1,0 +1,4 @@
+dataset_name,nn_linkage_clustering_rand_scoremanhattan,nn_linkage_clustering_timemanhattan,nn_linkage_clustering_rand_scoreeuclidean,nn_linkage_clustering_timeeuclidean
+R15.arff,0.9109849749582638,0.6267337799072266,0.9109849749582638,1.0037243366241455
+blobs.arff,0.3356298773690078,0.17745256423950195,0.3356298773690078,0.2682071924209595
+target.arff,1.0,1.0275688171386719,1.0,1.6545330286026

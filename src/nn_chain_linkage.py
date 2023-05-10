@@ -1,10 +1,8 @@
 import numpy as np
-import time
-import math
 
 class NNChainLinkage():
 
-    def __init__(self, algorithm='euclidean', formula='single'):
+    def __init__(self, algorithm: str='euclidean', formula: str='single'):
         self.pairwise_diss_dict = {
             'euclidean': self._euclidean,
             'manhattan': self._manhattan
@@ -17,14 +15,12 @@ class NNChainLinkage():
         if algorithm not in self.pairwise_diss_dict:
             print("---Available metrics---")
             print(list(self.pairwise_diss_dict.keys()))
-            raise Exception(
-                f"Unrecognized distance algorithm: {algorithm}.")
+            raise Exception(f"Unrecognized distance algorithm: {algorithm}.")
         self.pairwise_diss = self.pairwise_diss_dict[algorithm]
         if formula not in self.formula_dict:
             print("---Available formulas---")
             print(list(self.pairwise_diss_dict.keys()))
-            raise Exception(
-                f"Unrecognized formula: {formula}.")
+            raise Exception(f"Unrecognized formula: {formula}.")
         self.formula = self.formula_dict[formula]
 
     def fit_predict(self, data: np.ndarray) -> np.ndarray:
@@ -35,9 +31,7 @@ class NNChainLinkage():
         linkage = self._nn_chain_core(len(data), pairwise_diss)
         order = np.argsort(linkage[:, 2], kind='stable')
         linkage = linkage[order]
-        #print("L", linkage)
         L_prim = self._label(linkage)
-        #print("L_prim", L_prim)
         return L_prim
     
     def _label(self, sorted_linkage):
@@ -56,7 +50,7 @@ class NNChainLinkage():
 
         return labels
 
-    def _nn_chain_core(self, data_size: int, pairwise_diss: np.ndarray):
+    def _nn_chain_core(self, data_size: int, pairwise_diss: np.ndarray) -> np.ndarray:
         L = np.empty((data_size-1, 3))
         i=0
         S = np.arange(data_size, dtype=np.int_)
@@ -64,66 +58,34 @@ class NNChainLinkage():
         size = np.full(data_size, fill_value=1)
 
         while len(S) > 1:
-            #time.sleep(0.05)
             if len(chain) <= 3:
-                #print("len(chain) <= 3:")
                 a = S[0]
                 b = S[1]
                 chain = [a]
-                #print("a, b", a, b)
-                #if size[b] == 0:
-                #    print("1 size[b] == 0", b)
-                #    exit(-1)
             else:
-                #print("else")
-                #print("chain", chain)
                 a = chain[-4]
                 b = chain[-3]
                 chain = chain[:len(chain) - 3]
-                #print("chain2", chain)
-                #if size[b] == 0:
-                #    print("2 size[b] == 0", b)
-                #    exit(-1)
             
             while True:
-                #print("while True:")
-                #print(a, b)
                 c = b
                 b_a_value = pairwise_diss[b, a]
-                #print("c, b_a_value", c, b_a_value)
                 S_prim = np.delete(S, np.where(S==a))
                 x_a_value = pairwise_diss[[x for x in S_prim], a].min()
-                #print(np.partition(pairwise_diss[[x for x in S], a], 1)[:4])
-                #print("x_a_value", x_a_value)
                 x_a_indices = np.where(pairwise_diss[:, a] == x_a_value)[0]
-                #print("x_a_indices", x_a_indices)
                 for index in x_a_indices:
                     if index in S_prim:
                         x_a_index = index
                         break
 
                 if x_a_value < b_a_value:
-                    #print("vs", x_a_value, b_a_value)
                     c = x_a_index
 
-                #if c not in S:
-                #    print("c not in S")
-                #    exit(-1)
-
                 a, b = c, a
-                #print("a, b", a, b)
-                #if size[b] == 0:
-                #    print("3 size[b] == 0", b)
-                #    exit(-1)
                 chain.append(a)
-                #print("chain", chain)
                 if len(chain) >=3 and a == chain[-3]:
                     break
 
-            #print("L: a, b", a, b)
-            #if size[b] == 0:
-            #    print("size[b] == 0", b)
-            #    exit(-1)
             L[i, 0] = a
             L[i, 1] = b
             L[i, 2] = pairwise_diss[a, b]
@@ -141,22 +103,16 @@ class NNChainLinkage():
                 pairwise_diss[x, n] = diss
             S = np.append(S, n)
 
-        #print(size)
         return L
 
     # single
-    def _single(self, diss_a_x, diss_b_x, diss_a_b, size_a, size_b, size_x):
-        #ward = (size_a+size_x) * diss_a_x + (size_b + size_x) * diss_b_x - size_x * diss_a_b
-        #if ward > 1000:
-        #    print(ward, size_a, size_b, size_x)
-        #ward = ward/(size_a + size_b + size_x)
-        #return math.sqrt(ward)
+    def _single(self, diss_a_x: float, diss_b_x: float, diss_a_b: float, size_a: int, size_b: int, size_x: int) ->float:
         return min(diss_a_x, diss_b_x)
     
-    def _complete(self, diss_a_x, diss_b_x, diss_a_b, size_a, size_b, size_x):
+    def _complete(self, diss_a_x: float, diss_b_x: float, diss_a_b: float, size_a: int, size_b: int, size_x: int) ->float:
         return max(diss_a_x, diss_b_x)
     
-    def _average(self, diss_a_x, diss_b_x, diss_a_b, size_a, size_b, size_x):
+    def _average(self, diss_a_x: float, diss_b_x: float, diss_a_b: float, size_a: int, size_b: int, size_x: int) ->float:
         return (size_a * diss_a_x + size_b * diss_b_x)/(size_a + size_b)
 
     def _euclidean(self, data: np.ndarray) -> np.ndarray:
@@ -195,12 +151,12 @@ class UnionFind:
         self.parent = np.full(2 * n - 1, fill_value=-1)
         self.next_label = n
 
-    def union(self, m: int, n: int):
+    def union(self, m: int, n: int) -> None:
         self.parent[m] = self.next_label
         self.parent[n] = self.next_label
         self.next_label = self.next_label + 1
 
-    def efficient_find(self, n: int):
+    def efficient_find(self, n: int) -> int:
         p = n
 
         while self.parent[n] != -1:
@@ -211,11 +167,10 @@ class UnionFind:
 
         return n
     
-def get_clusters(linkage, n_data, n_clusters):
+def get_clusters(linkage: np.ndarray, n_data: int, n_clusters: int) -> np.ndarray:
     for link in linkage:
         if link[0] == link[1]:
             print(link)
-    #print(linkage)
     clusters = {}
     curr_label = n_data
     for i in range(n_data):
@@ -247,7 +202,6 @@ def get_clusters(linkage, n_data, n_clusters):
 
         clusters[curr_label] = []
         clusters[curr_label] = [] + clusters[ready[i][0]] + clusters[ready[i][1]]
-        #print(ready[i][0])
         clusters.pop(ready[i][0])
         clusters.pop(ready[i][1])
         curr_label = curr_label + 1

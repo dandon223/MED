@@ -1,9 +1,9 @@
 dataset_name,columns,nn_linkage_clustering_time
-arrhythmia.arff,2,0.5498180389404297
-arrhythmia.arff,4,0.8503393650054931
-arrhythmia.arff,8,0.8395477771759033
-arrhythmia.arff,16,1.2206754207611084
-arrhythmia.arff,32,1.9991963863372804
-arrhythmia.arff,64,3.5507240295410156
-arrhythmia.arff,128,6.753548240661621
-arrhythmia.arff,256,13.0877854347229
+arrhythmia.arff,2,0.6084995269775391
+arrhythmia.arff,4,0.6829658508300781
+arrhythmia.arff,8,0.8916752815246582
+arrhythmia.arff,16,1.282062816619873
+arrhythmia.arff,32,2.1168273448944093
+arrhythmia.arff,64,3.778403615951538
+arrhythmia.arff,128,7.033024883270263
+arrhythmia.arff,256,13.837004661560059

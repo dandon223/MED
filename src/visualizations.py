@@ -27,14 +27,14 @@ plt=px.bar(
 )
 plt.show()
 
-plt=px.bar(
-    data_frame = average_score_artificial_subset,
-    x =DATASET_NAME,
-    y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
-    barmode =GROUP,
-    title='Time for average metric with artificial subset',
-)
-plt.show()
+# plt=px.bar(
+#     data_frame = average_score_artificial_subset,
+#     x =DATASET_NAME,
+#     y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
+#     barmode =GROUP,
+#     title='Time for average metric with artificial subset',
+# )
+# plt.show()
 
 average_score_real_world_subset=pd.read_csv(RESULTS_FOLDER + 'average_score_real_world_subset.csv')
 plt=px.bar(
@@ -46,14 +46,14 @@ plt=px.bar(
 )
 plt.show()
 
-plt=px.bar(
-    data_frame = average_score_real_world_subset,
-    x =DATASET_NAME,
-    y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
-    barmode =GROUP,
-    title='Time for average metric with real world subset',
-)
-plt.show()
+# plt=px.bar(
+#     data_frame = average_score_real_world_subset,
+#     x =DATASET_NAME,
+#     y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
+#     barmode =GROUP,
+#     title='Time for average metric with real world subset',
+# )
+# plt.show()
 
 complete_rand_score_artificial_subset=pd.read_csv(RESULTS_FOLDER + 'complete_rand_score_artificial-subset.csv')
 plt=px.bar(
@@ -65,14 +65,14 @@ plt=px.bar(
 )
 plt.show()
 
-plt=px.bar(
-    data_frame = complete_rand_score_artificial_subset,
-    x =DATASET_NAME,
-    y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
-    barmode =GROUP,
-    title='Time for complete metric with artificial subset',
-)
-plt.show()
+# plt=px.bar(
+#     data_frame = complete_rand_score_artificial_subset,
+#     x =DATASET_NAME,
+#     y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
+#     barmode =GROUP,
+#     title='Time for complete metric with artificial subset',
+# )
+# plt.show()
 
 complete_rand_score_real_world_subset=pd.read_csv(RESULTS_FOLDER + 'complete_rand_score_real_world_subset.csv')
 plt=px.bar(
@@ -84,14 +84,14 @@ plt=px.bar(
 )
 plt.show()
 
-plt=px.bar(
-    data_frame = complete_rand_score_real_world_subset,
-    x =DATASET_NAME,
-    y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
-    barmode =GROUP,
-    title='Time for complete metric with real world subset',
-)
-plt.show()
+# plt=px.bar(
+#     data_frame = complete_rand_score_real_world_subset,
+#     x =DATASET_NAME,
+#     y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
+#     barmode =GROUP,
+#     title='Time for complete metric with real world subset',
+# )
+# plt.show()
 
 single_manhattan_rand_score_artificial_subset=pd.read_csv(RESULTS_FOLDER + 'single_manhattan_rand_score_artificial-subset.csv')
 plt=px.bar(
@@ -103,14 +103,14 @@ plt=px.bar(
 )
 plt.show()
 
-plt=px.bar(
-    data_frame = single_manhattan_rand_score_artificial_subset,
-    x =DATASET_NAME,
-    y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
-    barmode =GROUP,
-    title='Time for single metric and manhattan with artificial subset',
-)
-plt.show()
+# plt=px.bar(
+#     data_frame = single_manhattan_rand_score_artificial_subset,
+#     x =DATASET_NAME,
+#     y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
+#     barmode =GROUP,
+#     title='Time for single metric and manhattan with artificial subset',
+# )
+# plt.show()
 
 single_manhattan_rand_score_real_world_subset=pd.read_csv(RESULTS_FOLDER + 'single_manhattan_rand_score_real_world_subset.csv')
 plt=px.bar(
@@ -122,14 +122,14 @@ plt=px.bar(
 )
 plt.show()
 
-plt=px.bar(
-    data_frame = single_manhattan_rand_score_real_world_subset,
-    x =DATASET_NAME,
-    y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
-    barmode =GROUP,
-    title='Time for single metric and manhattan with real world subset',
-)
-plt.show()
+# plt=px.bar(
+#     data_frame = single_manhattan_rand_score_real_world_subset,
+#     x =DATASET_NAME,
+#     y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
+#     barmode =GROUP,
+#     title='Time for single metric and manhattan with real world subset',
+# )
+# plt.show()
 
 single_rand_score_artificial_subset=pd.read_csv(RESULTS_FOLDER + 'single_rand_score_artificial-subset.csv')
 plt=px.bar(
@@ -141,14 +141,14 @@ plt=px.bar(
 )
 plt.show()
 
-plt=px.bar(
-    data_frame = single_rand_score_artificial_subset,
-    x =DATASET_NAME,
-    y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
-    barmode =GROUP,
-    title='Time for single metric with artificial subset',
-)
-plt.show()
+# plt=px.bar(
+#     data_frame = single_rand_score_artificial_subset,
+#     x =DATASET_NAME,
+#     y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
+#     barmode =GROUP,
+#     title='Time for single metric with artificial subset',
+# )
+# plt.show()
 
 single_rand_score_real_world_subset=pd.read_csv(RESULTS_FOLDER + 'single_rand_score_real_world_subset.csv')
 plt=px.bar(
@@ -160,11 +160,30 @@ plt=px.bar(
 )
 plt.show()
 
+# plt=px.bar(
+#     data_frame = single_rand_score_real_world_subset,
+#     x =DATASET_NAME,
+#     y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
+#     barmode =GROUP,
+#     title='Time for single metric with real world subset',
+# )
+# plt.show()
+
+type_of_algorithm_time=pd.read_csv(RESULTS_FOLDER + 'type_of_algorithm_time.csv')
+algorithms=["manhattan", "euclidean"]
 plt=px.bar(
-    data_frame = single_rand_score_real_world_subset,
+    data_frame = type_of_algorithm_time,
     x =DATASET_NAME,
-    y = [AGGLOMERATIVE_CLUSTERING_TIME,NN_LINKAGE_CLUSTERING_TIME],
+    y = [NN_LINKAGE_CLUSTERING_RAND_SCORE+ algorithms[0],NN_LINKAGE_CLUSTERING_RAND_SCORE+ algorithms[1]],
     barmode =GROUP,
-    title='Time for single metric with real world subset',
+    title='Rand score for types of algorithm used.',
+)
+plt.show()
+plt=px.bar(
+    data_frame = type_of_algorithm_time,
+    x =DATASET_NAME,
+    y = [NN_LINKAGE_CLUSTERING_TIME+ algorithms[0],NN_LINKAGE_CLUSTERING_TIME+ algorithms[1]],
+    barmode =GROUP,
+    title='Time for for types of algorithm used.',
 )
 plt.show()
