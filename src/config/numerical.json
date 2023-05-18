@@ -2,5 +2,6 @@
     "input_file":"../datasets/agaricus-lepiota.data",
     "algorithm":"gower",
     "formula":"single",
-    "output_file":"result.csv"
+    "output_file":"result.csv",
+    "is_numerical":"True"
  }

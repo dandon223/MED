@@ -2,5 +2,6 @@
     "input_file":"../datasets/arrhythmia.arff",
     "algorithm":"euclidean",
     "formula":"single",
-    "output_file":"result.csv"
+    "output_file":"result.csv",
+    "is_numerical":"False"
  }

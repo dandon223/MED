@@ -63,24 +63,24 @@ def test() -> None:
     real_world = '../datasets/real-world-subset'
     results_folder = '../results/'
     print("single_test_rand_score_artificial")
-    #test_rand_score_time(artificial, results_folder + "single_rand_score_artificial-subset.csv", "euclidean", "single", 1)
+    test_rand_score_time(artificial, results_folder + "single_rand_score_artificial-subset.csv", "euclidean", "single", 1)
     print("single_test_rand_score_real_world_subset")
-    #test_rand_score_time(real_world, results_folder + "single_rand_score_real_world_subset.csv", "euclidean", "single", 1)
+    test_rand_score_time(real_world, results_folder + "single_rand_score_real_world_subset.csv", "euclidean", "single", 1)
 
     print("complete_test_rand_score_artificial")
-    #test_rand_score_time(artificial, results_folder + "complete_rand_score_artificial-subset.csv", "euclidean", "complete", 1)
+    test_rand_score_time(artificial, results_folder + "complete_rand_score_artificial-subset.csv", "euclidean", "complete", 1)
     print("complete_test_rand_score_real_world_subset")
-    #test_rand_score_time(real_world, results_folder + "complete_rand_score_real_world_subset.csv", "euclidean", "complete", 1)
+    test_rand_score_time(real_world, results_folder + "complete_rand_score_real_world_subset.csv", "euclidean", "complete", 1)
 
     print("average_test_rand_score_artificial")
-    #test_rand_score_time(artificial, results_folder + "average_score_artificial-subset.csv", "euclidean", "average", 1)
+    test_rand_score_time(artificial, results_folder + "average_score_artificial-subset.csv", "euclidean", "average", 1)
     print("average_test_rand_score_real_world_subset")
-    #test_rand_score_time(real_world, results_folder + "average_score_real_world_subset.csv", "euclidean", "average", 1)
+    test_rand_score_time(real_world, results_folder + "average_score_real_world_subset.csv", "euclidean", "average", 1)
 
     print("single_manhattan_test_rand_score_artificial")
-    #test_rand_score_time(artificial, results_folder + "single_manhattan_rand_score_artificial-subset.csv", "manhattan", "single", 1)
+    test_rand_score_time(artificial, results_folder + "single_manhattan_rand_score_artificial-subset.csv", "manhattan", "single", 1)
     print("single_manhattan_test_rand_score_real_world_subset")
-    #test_rand_score_time(real_world, results_folder + "single_manhattan_rand_score_real_world_subset.csv", "manhattan", "single", 1)
+    test_rand_score_time(real_world, results_folder + "single_manhattan_rand_score_real_world_subset.csv", "manhattan", "single", 1)
 
     print("number_of_features_test")
     columns_number = [2, 4, 8, 16, 32, 64, 128, 256]
