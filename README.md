@@ -22,7 +22,7 @@ python tests.py --dev_test 1
 
 ## Running algorithm
 * In config folder there are config files used by this project.
-* To run one such config gile.
+* To run one such config file.
 ```
 python main.py --config_file config/numerical.json
 ```
