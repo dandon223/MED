@@ -1,0 +1,6 @@
+{
+    "input_file":"../datasets/agaricus-lepiota.data",
+    "algorithm":"gower",
+    "formula":"single",
+    "output_file":"result.csv"
+ }

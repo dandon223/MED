@@ -1,0 +1,2 @@
+dataset_name,nn_linkage_clustering_rand_scoresingle,nn_linkage_clustering_timesingle,nn_linkage_clustering_rand_scorecomplete,nn_linkage_clustering_timecomplete
+agaricus-lepiota.data,0.5276814171028801,212.4474398136139,0.5012868812712149,205.09300136566162

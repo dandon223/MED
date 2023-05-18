@@ -187,3 +187,22 @@ plt=px.bar(
     title='Time for for types of algorithm used.',
 )
 plt.show()
+
+numerical_data_test=pd.read_csv(RESULTS_FOLDER + 'numerical_data_test.csv')
+formula=["single", "complete"]
+plt=px.bar(
+    data_frame = numerical_data_test,
+    x =DATASET_NAME,
+    y = [NN_LINKAGE_CLUSTERING_RAND_SCORE+ formula[0],NN_LINKAGE_CLUSTERING_RAND_SCORE+ formula[1]],
+    barmode =GROUP,
+    title='Rand score for types of formulas used.',
+)
+plt.show()
+plt=px.bar(
+    data_frame = numerical_data_test,
+    x =DATASET_NAME,
+    y = [NN_LINKAGE_CLUSTERING_TIME+ formula[0],NN_LINKAGE_CLUSTERING_TIME+ formula[1]],
+    barmode =GROUP,
+    title='Time for for types of formulas used.',
+)
+plt.show()

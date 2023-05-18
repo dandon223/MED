@@ -5,7 +5,8 @@ class NNChainLinkage():
     def __init__(self, algorithm: str='euclidean', formula: str='single'):
         self.pairwise_diss_dict = {
             'euclidean': self._euclidean,
-            'manhattan': self._manhattan
+            'manhattan': self._manhattan,
+            'gower': self._gower
         }
         self.formula_dict = {
             'single': self._single,
@@ -143,6 +144,30 @@ class NNChainLinkage():
                 distance_matrix[i][j] = distance
                 distance_matrix[j][i] = distance
 
+        return distance_matrix
+    
+    def _gower(self, data: np.ndarray) -> np.ndarray:
+        n = len(data)
+        distance_matrix = np.zeros((n, n))
+
+        number_of_features = len(data[0])
+        ranges = {}
+        for k in range(number_of_features):
+            if data[0, k].isnumeric():
+                min_range = min(data[:, k])
+                max_range = max(data[:, k])
+                ranges[k] = max_range - min_range
+
+        for i in range(n):
+            for j in range(i + 1, n):
+                distance = 0.0
+                for k in range(len(data[i])):
+                    if data[i][k].isnumeric():
+                        distance += 1 - abs(float(data[i][k]) - float(data[j][k]))/ranges[k]
+                    elif data[i][k] == data[j][k]:
+                        distance += 1
+                distance_matrix[i][j] = distance/number_of_features
+                distance_matrix[j][i] = distance/number_of_features
         return distance_matrix
 
 class UnionFind:
