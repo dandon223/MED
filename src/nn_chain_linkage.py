@@ -153,7 +153,9 @@ class NNChainLinkage():
         number_of_features = len(data[0])
         ranges = {}
         for k in range(number_of_features):
-            if data[0, k].isnumeric():
+            if self.is_float(data[0, k]):
+                for index, element in enumerate(data[:, k]):
+                    data[index, k] = float(element)
                 min_range = min(data[:, k])
                 max_range = max(data[:, k])
                 ranges[k] = max_range - min_range
@@ -162,13 +164,24 @@ class NNChainLinkage():
             for j in range(i + 1, n):
                 distance = 0.0
                 for k in range(len(data[i])):
-                    if data[i][k].isnumeric():
+                    if self.is_float(data[i][k]):
+                        data[i][k] = float(data[i][k])
+                        data[j][k] = float(data[j][k])
                         distance += 1 - abs(float(data[i][k]) - float(data[j][k]))/ranges[k]
                     elif data[i][k] == data[j][k]:
                         distance += 1
                 distance_matrix[i][j] = distance/number_of_features
                 distance_matrix[j][i] = distance/number_of_features
         return distance_matrix
+
+    def is_float(self, element: any) -> bool:
+        if element is None: 
+            return False
+        try:
+            float(element)
+            return True
+        except ValueError:
+            return False
 
 class UnionFind:
 
