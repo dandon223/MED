@@ -10,6 +10,7 @@ import time
 from sklearn.cluster import AgglomerativeClustering
 from nn_chain_linkage import NNChainLinkage, get_clusters
 from sklearn import metrics
+
 NN_LINKAGE_CLUSTERING = 'nn_linkage_clustering'
 NN_LINKAGE_CLUSTERING_RAND_SCORE = NN_LINKAGE_CLUSTERING + '_rand_score'
 NN_LINKAGE_CLUSTERING_TIME = NN_LINKAGE_CLUSTERING + '_time'
@@ -19,6 +20,7 @@ AGGLOMERATIVE_CLUSTERING_RAND_SCORE = AGGLOMERATIVE_CLUSTERING + '_rand_score'
 AGGLOMERATIVE_CLUSTERING_TIME = AGGLOMERATIVE_CLUSTERING + '_time'
 
 def get_numerical_dataset(file: str)  -> Tuple[pd.DataFrame, int]:
+
     dataset = pd.read_csv(file, header=None, dtype="string")
     number_of_clusters = dataset.iloc[:, -1].nunique()
     dataset = dataset.rename(columns={dataset.columns[-1]: "ground_truth"})
@@ -42,6 +44,7 @@ def get_dataset(dataset: str) -> Tuple[pd.DataFrame, int]:
     return df, number_of_clusters
 
 def get_datasets(files: List[Path]) -> Tuple[Dict, Dict]:
+
     datasets_dict = {}
     numbers_of_clusters_dict = {}
     for file in files:
@@ -59,6 +62,7 @@ def get_datasets(files: List[Path]) -> Tuple[Dict, Dict]:
     return datasets_dict, numbers_of_clusters_dict
 
 def test() -> None:
+
     artificial = '../datasets/artificial-subset'
     real_world = '../datasets/real-world-subset'
     results_folder = '../results/'
@@ -98,6 +102,7 @@ def test() -> None:
     return 0
 
 def numerical_data_test(file: str, csv_name:str, number_of_times: int):
+
     dataset, number_of_clusters = get_numerical_dataset(file)
     formulas=['single', 'complete']
     result = {}
@@ -119,6 +124,7 @@ def numerical_data_test(file: str, csv_name:str, number_of_times: int):
     df.to_csv(csv_name, index=False)
 
 def type_of_algorithm_test(folder: str, csv_name:str, number_of_times: int, formula:str):
+
     results = []
     subset=["R15.arff", "blobs.arff",  "target.arff"]
     algorithms=["manhattan", "euclidean"]
@@ -144,6 +150,7 @@ def type_of_algorithm_test(folder: str, csv_name:str, number_of_times: int, form
     df.to_csv(csv_name, index=False)
 
 def test_number_of_rows(rows_number: int,csv_name:str, dataset_name: str = "../datasets/letter.arff", number_of_times: int=5, algorithm: str="euclidean", formula: str="single"):
+
     data, number_of_clusters = get_dataset(dataset_name)
     results = []
     for row_number in rows_number:
@@ -165,6 +172,7 @@ def test_number_of_rows(rows_number: int,csv_name:str, dataset_name: str = "../d
     df.to_csv(csv_name, index=False)
 
 def test_number_of_features(columns_number, csv_name:str, dataset_name: str = "../datasets/arrhythmia.arff", number_of_times=5, algorithm="euclidean", formula="single"):
+
     data, number_of_clusters = get_dataset(dataset_name)
     Y = data['ground_truth']
     data = data.drop(['ground_truth'], axis=1)
@@ -189,6 +197,7 @@ def test_number_of_features(columns_number, csv_name:str, dataset_name: str = ".
     df.to_csv(csv_name, index=False)
 
 def test_rand_score_time(folder: str, csv_name: str, algorithm:str, formula:str, number_of_times: int) -> None:
+
     datasets, number_of_clusters = get_datasets(Path(folder).glob("*"))
 
     print("test_agglomerative_clustering")
@@ -202,6 +211,7 @@ def test_rand_score_time(folder: str, csv_name: str, algorithm:str, formula:str,
     df.to_csv(csv_name, index=False)
 
 def run_nn_linkage_clustering(data: pd.DataFrame, number_of_clusters: int, algorithm: str, formula: str ) -> Tuple[float, float, pd.Series]:
+
     Y_data = data["ground_truth"]
     X_data = data.drop(['ground_truth'], axis=1)
     nn_chain_linkage_alg = NNChainLinkage(algorithm, formula)
@@ -218,6 +228,7 @@ def run_nn_linkage_clustering(data: pd.DataFrame, number_of_clusters: int, algor
     return score, time_run, clusters_index
 
 def test_nn_linkage_clustering(datasets: Dict[str, pd.DataFrame], number_of_clusters: Dict[str, int], algorithm:str, formula:str, number_of_times: int) -> pd.DataFrame:
+
     results = []
     dataset_size = len(datasets)
     for index, dataset in enumerate(datasets):
@@ -243,6 +254,7 @@ def test_nn_linkage_clustering(datasets: Dict[str, pd.DataFrame], number_of_clus
     return df
 
 def run_agglomerative_clustering(data: pd.DataFrame, number_of_clusters: int, algorithm: str, formula: str ) -> Tuple[float, float, pd.Series]:
+
     hierarchical_cluster = AgglomerativeClustering(n_clusters=number_of_clusters, affinity=algorithm, linkage=formula)
     Y_data = data["ground_truth"]
     X_data = data.drop(['ground_truth'], axis=1)
@@ -254,6 +266,7 @@ def run_agglomerative_clustering(data: pd.DataFrame, number_of_clusters: int, al
     return score, time_run, labels
 
 def test_agglomerative_clustering(datasets: Dict[str, pd.DataFrame], number_of_clusters: Dict[str, int], algorithm:str, formula:str, number_of_times: int) -> pd.DataFrame:
+
     results = []
     dataset_size = len(datasets)
     for index, dataset in enumerate(datasets):
@@ -279,6 +292,7 @@ def test_agglomerative_clustering(datasets: Dict[str, pd.DataFrame], number_of_c
     return df
 
 def dev_test(dataset: str = "../datasets/artificial-subset/R15.arff") -> None: # artificial/target # real-world/balance-scale.arff
+
     data, number_of_clusters = get_dataset(dataset)
     score, time_run, agglomerative_clustering_labels = run_agglomerative_clustering(data, number_of_clusters, 'euclidean', 'single')
 

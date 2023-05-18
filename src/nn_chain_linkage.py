@@ -25,6 +25,7 @@ class NNChainLinkage():
         self.formula = self.formula_dict[formula]
 
     def fit_predict(self, data: np.ndarray) -> np.ndarray:
+
         return self._nn_chain_linkage(data, self.pairwise_diss(data))
     
     def _nn_chain_linkage(self, data: np.ndarray, pairwise_diss: np.ndarray):
@@ -35,7 +36,8 @@ class NNChainLinkage():
         L_prim = self._label(linkage)
         return L_prim
     
-    def _label(self, sorted_linkage):
+    def _label(self, sorted_linkage: np.ndarray):
+
         labels = np.full((len(sorted_linkage), 3), np.inf)
         union_find = UnionFind(len(sorted_linkage) + 1)
 
@@ -52,6 +54,7 @@ class NNChainLinkage():
         return labels
 
     def _nn_chain_core(self, data_size: int, pairwise_diss: np.ndarray) -> np.ndarray:
+
         L = np.empty((data_size-1, 3))
         i=0
         S = np.arange(data_size, dtype=np.int_)
@@ -108,15 +111,19 @@ class NNChainLinkage():
 
     # single
     def _single(self, diss_a_x: float, diss_b_x: float, diss_a_b: float, size_a: int, size_b: int, size_x: int) ->float:
+
         return min(diss_a_x, diss_b_x)
     
     def _complete(self, diss_a_x: float, diss_b_x: float, diss_a_b: float, size_a: int, size_b: int, size_x: int) ->float:
+
         return max(diss_a_x, diss_b_x)
     
     def _average(self, diss_a_x: float, diss_b_x: float, diss_a_b: float, size_a: int, size_b: int, size_x: int) ->float:
+
         return (size_a * diss_a_x + size_b * diss_b_x)/(size_a + size_b)
 
     def _euclidean(self, data: np.ndarray) -> np.ndarray:
+
         n = len(data)
         distance_matrix = np.zeros((n, n))
 
@@ -132,6 +139,7 @@ class NNChainLinkage():
         return distance_matrix
 
     def _manhattan(self, data: np.ndarray) -> np.ndarray:
+
         n = len(data)
         distance_matrix = np.zeros((n, n))
 
@@ -147,6 +155,7 @@ class NNChainLinkage():
         return distance_matrix
     
     def _gower(self, data: np.ndarray) -> np.ndarray:
+
         n = len(data)
         distance_matrix = np.zeros((n, n))
 
@@ -175,6 +184,7 @@ class NNChainLinkage():
         return distance_matrix
 
     def is_float(self, element: any) -> bool:
+
         if element is None: 
             return False
         try:
@@ -186,15 +196,18 @@ class NNChainLinkage():
 class UnionFind:
 
     def __init__(self, n: int):
+
         self.parent = np.full(2 * n - 1, fill_value=-1)
         self.next_label = n
 
     def union(self, m: int, n: int) -> None:
+
         self.parent[m] = self.next_label
         self.parent[n] = self.next_label
         self.next_label = self.next_label + 1
 
     def efficient_find(self, n: int) -> int:
+
         p = n
 
         while self.parent[n] != -1:
@@ -206,6 +219,7 @@ class UnionFind:
         return n
     
 def get_clusters(linkage: np.ndarray, n_data: int, n_clusters: int) -> np.ndarray:
+
     for link in linkage:
         if link[0] == link[1]:
             print(link)
