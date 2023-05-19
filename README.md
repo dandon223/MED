@@ -19,7 +19,10 @@ python tests.py --test 1
 ```
 python tests.py --dev_test 1
 ```
-
+## Visualization
+```
+python visualizations.py
+```
 ## Running algorithm
 * In config folder there are config files used by this project.
 * To run one such config file.
