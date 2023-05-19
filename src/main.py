@@ -28,7 +28,7 @@ def run(config_file: str):
         start = time.time()
         linkage = nn_chain_linkage_alg.fit_predict(X_data.to_numpy())
         clusters = get_clusters(linkage, len(X_data), number_of_clusters)
-        print("clusters", clusters)
+        #print("clusters", clusters)
         clusters_index = [np.nan for _ in range(len(data.index))]
         for index, cluster in enumerate(clusters):
             for point in cluster:

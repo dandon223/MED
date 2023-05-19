@@ -37,7 +37,7 @@ class NNChainLinkage():
         return L_prim
     
     def _label(self, sorted_linkage: np.ndarray):
-        print("sorted_linkage", sorted_linkage)
+        #print("sorted_linkage", sorted_linkage)
 
         labels = np.full((len(sorted_linkage), 3), np.inf)
         union_find = UnionFind(len(sorted_linkage) + 1)
@@ -52,7 +52,7 @@ class NNChainLinkage():
             labels[i, 2] = sorted_linkage[i, 2]
             union_find.union(root_a, root_b)
 
-        print("labels", labels)
+        #print("labels", labels)
         return labels
 
     def _nn_chain_core(self, data_size: int, pairwise_diss: np.ndarray) -> np.ndarray:
@@ -239,20 +239,20 @@ def get_clusters(linkage: np.ndarray, n_data: int, n_clusters: int) -> np.ndarra
     i = 0
     ready = linkage.copy()
     not_ready = []
-    print("ready", ready)
+    #print("ready", ready)
     while len(clusters) != n_clusters: 
-        print(clusters)
+        #print(clusters)
         if i == len(ready):
             i = 0
             ready = not_ready.copy()
-            print("ready-not_Ready", ready)
+            #print("ready-not_Ready", ready)
             not_ready = []
 
         if ready[i][0] not in clusters.keys() or ready[i][1] not in clusters.keys():
             not_ready.append(ready[i])
             i = i + 1
             continue
-        print(i)
+        #print(i)
         clusters[curr_label] = [] + clusters[ready[i][0]] + clusters[ready[i][1]]
         clusters.pop(ready[i][0])
         clusters.pop(ready[i][1])
