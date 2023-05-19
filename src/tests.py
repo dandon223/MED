@@ -19,7 +19,7 @@ AGGLOMERATIVE_CLUSTERING = 'agglomerative_clustering'
 AGGLOMERATIVE_CLUSTERING_RAND_SCORE = AGGLOMERATIVE_CLUSTERING + '_rand_score'
 AGGLOMERATIVE_CLUSTERING_TIME = AGGLOMERATIVE_CLUSTERING + '_time'
 
-def get_numerical_dataset(file: str)  -> Tuple[pd.DataFrame, int]:
+def get_other_dataset(file: str)  -> Tuple[pd.DataFrame, int]:
 
     dataset = pd.read_csv(file, header=None, dtype="string")
     number_of_clusters = dataset.iloc[:, -1].nunique()

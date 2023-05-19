@@ -3,5 +3,5 @@
     "algorithm":"gower",
     "formula":"single",
     "output_file":"result.csv",
-    "is_numerical":"True"
+    "is_arff":"True"
  }

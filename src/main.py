@@ -1,5 +1,5 @@
 import argparse
-from tests import get_dataset, get_numerical_dataset
+from tests import get_dataset, get_other_dataset
 import json
 import numpy as np
 import pandas as pd
@@ -15,10 +15,10 @@ def run(config_file: str):
         algorithm = data['algorithm']
         formula = data['formula']
         output_file = data['output_file']
-        is_numerical = data['is_numerical']
+        is_arff = data['is_arff']
 
-        if is_numerical == "True":
-            data, number_of_clusters = get_numerical_dataset(input_file)
+        if is_arff == "True":
+            data, number_of_clusters = get_other_dataset(input_file)
         else:
             data, number_of_clusters = get_dataset(input_file)
         Y_data = data["ground_truth"]
@@ -28,6 +28,7 @@ def run(config_file: str):
         start = time.time()
         linkage = nn_chain_linkage_alg.fit_predict(X_data.to_numpy())
         clusters = get_clusters(linkage, len(X_data), number_of_clusters)
+        print("clusters", clusters)
         clusters_index = [np.nan for _ in range(len(data.index))]
         for index, cluster in enumerate(clusters):
             for point in cluster:
