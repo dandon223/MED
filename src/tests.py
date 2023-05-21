@@ -103,7 +103,7 @@ def test() -> None:
 
 def numerical_data_test(file: str, csv_name:str, number_of_times: int):
 
-    dataset, number_of_clusters = get_numerical_dataset(file)
+    dataset, number_of_clusters = get_other_dataset(file)
     formulas=['single', 'complete']
     result = {}
     for formula in formulas:
